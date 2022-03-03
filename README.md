@@ -1,4 +1,4 @@
-#School asignment for IJC class
+# School asignment for IJC class
 
 Main language: C
 
