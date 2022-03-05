@@ -12,12 +12,27 @@
 #include "headers/error.h"
 
 
-void warning_msg(const char *fmt, ...)
+void warning_msg(const char * format, ...)
 {
+    fprintf(stderr, "CHYBA: ");
 
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+
+    return;
 }
 
-void error_exit(const char *fmt, ...)
+void error_exit(const char * format, ...)
 {
+    fprintf(stderr, "CHYBA: ");
+
+    va_list args;
     
+    va_start(args,format);
+    vprintf(args, format);
+    va_end(args);
+
+    exit(1);
 }
