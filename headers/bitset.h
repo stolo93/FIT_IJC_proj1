@@ -12,26 +12,42 @@
 #ifndef _BITSET_H
 #define _BITSET_H
 
+#include <stdlib.h>
+
 typedef unsigned long int * bitset_t;
 typedef unsigned long int bitset_index_t;
 
 /**
- * @brief create a bitset called name with size size
+ * @brief create a bitset called name with size size + 1, to store the size
  * the first index will store the size of the bitfield
- *  initializes the bitfield with zeroes
+ * initializes the bitfield with zeroes and stores size in the 0th index
  */
-#define bitset_create(name, size) {\
-\
-}
+#define bitset_create(name, size) ({\
+    static_assert(size > 0);\
+    unsigned long int name[size + 1];\
+    name[0] = size;\
+    for (size_t i = 0; i < size; i++)\
+    {\
+        name[i + 1] = 0;\
+    }\
+})
 
 
 /**
- * @brief //TODO finish the documentation
+ * @brief create a dynamicaly allocated bitset 
+ * called name with size size + 1, to store the size
+ * initializes the bitfield with zeroes and stores size in the 0th index
  * 
  */
-#define bitset_alloc(name, size) {\
-\
-}
+#define bitset_alloc(name, size) ({\
+    static_assert(size > 0)\
+    name = malloc(sizeof(unsigned long) * (size + 1));\
+    name[0] = size;\
+    for (size_t i = 0; i < size; i++)\
+    {\
+        name[i + 1] = 0;\
+    }\
+})
 
 #define bitset_free(name) {\
 \
