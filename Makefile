@@ -1,14 +1,16 @@
 CC=gcc
 Cflags = -g -std=c11 -pedantic -Wall -Wextra
 
-all: error bitset erat.c
-	$(CC) $(Cflags) error.o bitset.o erat.c -o erat
+all: erat_main
 
-error: error.c
+erat_main: error.o bitset.o
+	$(CC) $(Cflags) errro.o bitset.o erat.c -o erat_main
+
+error.o: error.c
 	$(CC) $(Cflags) -c error.c
 
-bitset: bitset.c
+bitset.o: bitset.c
 	$(CC) $(Cflags) -c bitset.c
 
 clean:
-	rm bitset.o error.o
+	rm *.o
