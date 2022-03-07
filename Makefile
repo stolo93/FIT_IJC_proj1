@@ -4,7 +4,7 @@ Cflags = -g -std=c11 -pedantic -Wall -Wextra
 all: erat_main
 
 erat_main: error.o bitset.o
-	$(CC) $(Cflags) errro.o bitset.o erat.c -o erat_main
+	$(CC) $(Cflags) errro.o bitset.o erat_main.c -o erat_main
 
 error.o: error.c
 	$(CC) $(Cflags) -c error.c
@@ -13,4 +13,4 @@ bitset.o: bitset.c
 	$(CC) $(Cflags) -c bitset.c
 
 clean:
-	rm *.o
+	rm *.o erat_main
