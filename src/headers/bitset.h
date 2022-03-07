@@ -82,6 +82,6 @@ typedef unsigned long int bitset_index_t;
  * //TODO check boundries of the bitset
  */
 #define bitset_getbit(name, index)\
-    name[(index)/_BITS_IN_LONG +1] & 1u << _BITS_IN_LONG - (index) % _BITS_IN_LONG
+    name[(index)/_BITS_IN_LONG +1] & 1u << (_BITS_IN_LONG - (index) % _BITS_IN_LONG)
 
 #endif //_BITSET_H\ No newline at end of file
