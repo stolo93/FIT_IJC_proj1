@@ -5,3 +5,5 @@
 *.so
 *.o
 
+#local_tests
+test_*
