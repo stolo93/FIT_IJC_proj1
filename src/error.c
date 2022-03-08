@@ -24,7 +24,7 @@ void warning_msg(const char * format, ...)
     return;
 }
 
-void error_exit(const char * format, ...)
+_Noreturn void error_exit(const char *fmt, ...)
 {
     fprintf(stderr, "CHYBA: ");
 
