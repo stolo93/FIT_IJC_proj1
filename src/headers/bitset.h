@@ -82,6 +82,8 @@ typedef unsigned long int bitset_index_t;
  * //TODO check boundries of the bitset
  */
 #define bitset_getbit(name, index)\
+    (index > _BITS_IN_LONG * bitset_size(name)) ?\
+    (error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long)(_BITS_IN_LONG * bitset_size(name))),0):\
     (name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - ((index) % _BITS_IN_LONG))) ? 1 : 0
 
 #endif //_BITSET_H\ No newline at end of file
