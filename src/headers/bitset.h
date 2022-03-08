@@ -13,8 +13,8 @@
 #define _BITSET_H
 
 #include <stdlib.h>
-#include <limits.h> // used for CHAR_BITS
-#include <assert.h>
+#include <limits.h> // used for CHAR_BIT
+#include <assert.h> //used for static_assert
 
 #include "error.h"
 
@@ -69,9 +69,10 @@ typedef unsigned long int bitset_index_t;
  */
 #define bitset_setbit(name, index, expr)({\
     bitset_index_t _index_max = _BITS_IN_LONG * bitset_size(name);\
-    if ((index) > _index_max) error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) _index_max);\
     bitset_index_t _index_real = (index) / _BITS_IN_LONG + 1;\
     unsigned int _index_offset = _MAX_LSHIFT - (index) % _BITS_IN_LONG;\
+    \
+    if ((index) > _index_max) error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) _index_max);\
     if (expr) name[_index_real] |= 1ul << _index_offset;\
     else name[_index_real] &= ~(1ul << _index_offset - 1);\
     })
