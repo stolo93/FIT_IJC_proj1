@@ -19,15 +19,33 @@ void Eratosthenes(bitset_t pole)
     bitset_setbit(pole, 0, 1);  
     bitset_setbit(pole, 1, 1);
 
-    for (bitset_index_t i = 2; i < pole[0]; i++)
+    for (bitset_index_t i = 2; i < pole[0] -1; i++)
     {
         if (bitset_getbit(pole, i))
         {
-            continue; //skipping if num was already filtered out
+            continue; //skipping if number was already filtered out
         }
         for (bitset_index_t j = i * 2; j < pole[0]; j += i)
         {
             bitset_setbit(pole, j, 1);
         }
     }
+
+    bitset_index_t count = 0;
+
+    for (bitset_index_t i = pole[0] -1; i >=2; i--)
+    {
+        if (count == 10)
+        {
+            break;
+        }
+
+        if (!bitset_getbit(pole, i))
+        {
+            printf("%lu\n",i);
+            count++;
+        }
+    }
+
+    return;
 }
