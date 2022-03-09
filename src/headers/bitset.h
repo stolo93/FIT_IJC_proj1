@@ -1,7 +1,7 @@
 /**
  * @file bitset.h
  * @author Samuel Stolarik (xstola03@fit.vutbr.cz)
- * @brief header file with operations on a bitfield data structure
+ * @brief header file with operations on a bitset data structure
  * @version 0.1
  * @date 2022-03-01
  * 
@@ -67,16 +67,9 @@ typedef unsigned long int bitset_index_t;
  * first it checks if index is valid (not out of bitset)
  */
 #define bitset_setbit(name, index, expr)\
-    do\
-    {\
-        bitset_index_t _index_max = _BITS_IN_LONG * bitset_size(name);\
-        bitset_index_t _index_real = (index) / _BITS_IN_LONG + 1;\
-        unsigned int _index_offset = _MAX_LSHIFT - (index) % _BITS_IN_LONG;\
-        \
-        if ((index) > _index_max) error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) _index_max);\
-        if (expr) name[_index_real] |= 1ul << _index_offset;\
-        else name[_index_real] &= ~(1ul << _index_offset - 1);\
-    } while (0)
+        if ((index) > (_BITS_IN_LONG * bitset_size(name))) error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) (_BITS_IN_LONG * bitset_size(name)));\
+        else if (expr) name[(index) / _BITS_IN_LONG + 1] |= 1ul << _MAX_LSHIFT - (index) % _BITS_IN_LONG;\
+        else name[(index) / _BITS_IN_LONG + 1] &= ~(1ul << _MAX_LSHIFT - (index) % _BITS_IN_LONG)
     
 
 /**
@@ -88,7 +81,7 @@ typedef unsigned long int bitset_index_t;
     (error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long)(_BITS_IN_LONG * bitset_size(name))),0):\
     ((name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - ((index) % _BITS_IN_LONG))) ? 1 : 0))
 
-// #else //USE_INLINE
+#else //USE_INLINE
 
 //TODO are this functions even meaningfull  ?
 // inline bitset_t bitset_create(/*TODO type*/ name, bitset_index_t size)
