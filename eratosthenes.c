@@ -1,18 +1,18 @@
 /**
  * @file eratosthenes.c
- * @author Samuel Stolarik (xstola03@stud.fit.vutbr.cz)
- * @brief eratosthenes algoritm for finding primes
- * @version 0.1
+ * @author Samuel Stolarik (xstola03@stud.fit.vutbr.cz), FIT
+ * 
+ * @brief IJC-DU1, part A
+ * implementing Sieve of Eratosthenes
+ * Used compiler: gcc (GCC) 11.2.0
+ * 
  * @date 2022-03-08
- * 
- * @copyright Copyright (c) 2022
- * 
  */
 
 #include <stdio.h>
 
-#include "headers/bitset.h"
-#include "headers/error.h"
+#include "bitset.h"
+#include "error.h"
 
 void Eratosthenes(bitset_t pole)
 {

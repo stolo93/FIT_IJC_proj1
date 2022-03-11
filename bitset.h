@@ -1,12 +1,12 @@
 /**
  * @file bitset.h
- * @author Samuel Stolarik (xstola03@fit.vutbr.cz)
- * @brief header file with operations on a bitset data structure
- * @version 0.1
+ * @author Samuel Stolarik (xstola03@fit.vutbr.cz), FIT
+ * 
+ * @brief IJC-DU1, part A
+ * header file containing macros and inline functions
+ * needed for operations on bitsets
+ * 
  * @date 2022-03-01
- * 
- * @copyright Copyright (c) 2022
- * 
  */
 
 #ifndef _BITSET_H

@@ -1,15 +1,15 @@
 /**
  * @file error.c
- * @author Samuel Stolarik (xstola03@stud.fit.vutbr.cz)
- * @brief implementation of error handling functions from error.h
- * @version 0.1
+ * @author Samuel Stolarik (xstola03@stud.fit.vutbr.cz), FIT
+ * 
+ * @brief IJC-DU1, part A
+ * implementation of functions defined in error.h header file
+ * Used compiler: gcc (GCC) 11.2.0
+ * 
  * @date 2022-03-03
- * 
- * @copyright Copyright (c) 2022
- * 
  */
 
-#include "headers/error.h"
+#include "error.h"
 
 
 void warning_msg(const char * format, ...)
