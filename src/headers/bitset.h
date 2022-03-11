@@ -1,7 +1,7 @@
 /**
  * @file bitset.h
  * @author Samuel Stolarik (xstola03@fit.vutbr.cz)
- * @brief header file with operations on a bitfield data structure
+ * @brief header file with operations on a bitset data structure
  * @version 0.1
  * @date 2022-03-01
  * 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <limits.h> // used for CHAR_BIT
 #include <assert.h> //used for static_assert
+#include <stdbool.h>
 
 #include "error.h"
 
@@ -43,6 +44,8 @@ typedef unsigned long int bitset_index_t;
     bitset_t name = calloc(((size / _BITS_IN_LONG) + ((size % _BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
     name[0] = (size);\
 
+#ifndef USE_INLINE
+
 /**
  * @brief free bitset created with bitset_alloc
  * 
@@ -64,16 +67,9 @@ typedef unsigned long int bitset_index_t;
  * first it checks if index is valid (not out of bitset)
  */
 #define bitset_setbit(name, index, expr)\
-    do\
-    {\
-        bitset_index_t _index_max = _BITS_IN_LONG * bitset_size(name);\
-        bitset_index_t _index_real = (index) / _BITS_IN_LONG + 1;\
-        unsigned int _index_offset = _MAX_LSHIFT - (index) % _BITS_IN_LONG;\
-        \
-        if ((index) > _index_max) error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) _index_max);\
-        if (expr) name[_index_real] |= 1ul << _index_offset;\
-        else name[_index_real] &= ~(1ul << _index_offset - 1);\
-    } while (0)
+        if ((index) > (_BITS_IN_LONG * bitset_size(name))) error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) (_BITS_IN_LONG * bitset_size(name)));\
+        else if (expr) name[(index) / _BITS_IN_LONG + 1] |= 1ul << _MAX_LSHIFT - (index) % _BITS_IN_LONG;\
+        else name[(index) / _BITS_IN_LONG + 1] &= ~(1ul << _MAX_LSHIFT - (index) % _BITS_IN_LONG)
     
 
 /**
@@ -85,4 +81,89 @@ typedef unsigned long int bitset_index_t;
     (error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long)(_BITS_IN_LONG * bitset_size(name))),0):\
     ((name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - ((index) % _BITS_IN_LONG))) ? 1 : 0))
 
+#else //USE_INLINE
+
+//TODO are this functions even meaningfull  ?
+// inline bitset_t bitset_create(/*TODO type*/ name, bitset_index_t size)
+// {
+// 
+// }
+
+// inline bitset_t bitset_alloc(/*TODO type*/ name, bitset_index_t size)
+// {
+// 
+// }
+
+/**
+ * @brief free memmory allocated by bitset_alloc pointed to by "name"
+ * 
+ * @param name 
+ */
+extern inline void bitset_free(bitset_t name)
+{
+    free(name);
+}
+
+/**
+ * @brief returns size of bitset
+ * 
+ * @param name 
+ * @return bitset_index_t 
+ */
+extern inline bitset_index_t bitset_size(bitset_t name)
+{
+    return name[0];
+}
+
+/**
+ * @brief sets bit at index "index" depending on what "expr evaluates to"
+ * 
+ * @param name 
+ * @param index 
+ * @param expr 
+ */
+extern inline void bitset_setbit(bitset_t name, bitset_index_t index, bool expr)
+{
+    bitset_index_t max_index = bitset_size(name) * _BITS_IN_LONG;
+    bitset_index_t index_real = (index) / _BITS_IN_LONG + 1;
+    unsigned int index_offset = _MAX_LSHIFT - (index) % _BITS_IN_LONG;
+
+    if (index > max_index)
+    {
+        error_exit("Index: %lu is higher than the max index: %lu.\n", index, max_index);
+    }
+
+    if (expr)
+    {
+        name[index_real] |= 1ul << index_offset;
+    }
+    else
+    {
+        name[index_real] &= ~(1ul << index_offset - 1);
+    }
+    return;
+}
+
+/**
+ * @brief returns bool value depending of value of bit on index "index"
+ * 
+ * @param name 
+ * @param index 
+ * @return true 
+ * @return false 
+ */
+extern inline bool bitset_getbit(bitset_t name, bitset_index_t index)
+{
+    bitset_index_t max_index = _BITS_IN_LONG * bitset_size(name);
+    if (index > max_index)
+    {
+        error_exit("Index: %lu is higher than max index: (%lu)\n",index, max_index);
+    }
+    else
+    {
+        return (name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - (index % _BITS_IN_LONG))) ? true : false;
+    }
+}
+
+#endif //USE_INLINE
 #endif //_BITSET_H\ No newline at end of file
