@@ -8,6 +8,12 @@
  * @date 2022-03-03
  */
 
+#ifndef _PPM_H
+#define _PPM_H
+
+#define X_MAX 8000
+#define Y_MAX 8000
+
 typedef struct ppm {
         unsigned xsize;
         unsigned ysize;
@@ -31,3 +37,5 @@ struct ppm * ppm_read(const char * filename);
  * @param p 
  */
 void ppm_free(struct ppm *p);
+
+#endif //_PPM_H
