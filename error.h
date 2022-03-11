@@ -2,7 +2,8 @@
  * @file error.h
  * @author Samuel Stolarik (xstola03@fit.vutbr.cz), FIT
  * 
- * @brief header file containing definitions of functions
+ * @brief IJC-DU1, part B 
+ * header file containing definitions of functions
  * used for handling errors
  * functions are implemented in error.c
  * 

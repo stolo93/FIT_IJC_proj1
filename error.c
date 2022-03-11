@@ -2,7 +2,7 @@
  * @file error.c
  * @author Samuel Stolarik (xstola03@stud.fit.vutbr.cz), FIT
  * 
- * @brief IJC-DU1, part A
+ * @brief IJC-DU1, part B
  * implementation of functions defined in error.h header file
  * Used compiler: gcc (GCC) 11.2.0
  * 
