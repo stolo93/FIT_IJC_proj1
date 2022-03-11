@@ -10,15 +10,16 @@
  */
 
 #include "error.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-
-void warning_msg(const char * format, ...)
+void warning_msg(const char *fmt, ...)
 {
     fprintf(stderr, "CHYBA: ");
 
     va_list args;
-    va_start(args, format);
-    vfprintf(stderr, format, args);
+    va_start(args, fmt);
+    vfprintf(stderr, fmt, args);
     va_end(args);
 
     return;
@@ -30,8 +31,8 @@ _Noreturn void error_exit(const char *fmt, ...)
 
     va_list args;
     
-    va_start(args,format);
-    vfprintf(stderr, format, args);
+    va_start(args,fmt);
+    vfprintf(stderr, fmt, args);
     va_end(args);
 
     exit(1);
