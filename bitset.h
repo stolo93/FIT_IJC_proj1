@@ -139,7 +139,7 @@ extern inline void bitset_setbit(bitset_t name, bitset_index_t index, bool expr)
     }
     else
     {
-        name[index_real] &= ~(1ul << index_offset - 1);
+        name[index_real] &= ~(1ul << (index_offset - 1));
     }
     return;
 }
