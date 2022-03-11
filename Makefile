@@ -4,6 +4,9 @@ Cflags = -g -std=c11 -pedantic -Wall -Wextra
 run: all
 	./primes && ./primes-i
 
+run_check: all
+	time ./primes | factor && time ./primes-i | factor
+	
 all: primes steg
 
 primes: error.o	eratosthenes.o
@@ -11,7 +14,7 @@ primes: error.o	eratosthenes.o
 	$(CC) $(Cflags) -lm -DUSE_INLINE eratosthenes.o error.o primes.c -o primes-i
 
 steg:
-	
+
 eratosthenes.o:
 	$(CC) $(Cflags) -c eratosthenes.c
 
