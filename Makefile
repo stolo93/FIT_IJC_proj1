@@ -6,7 +6,8 @@ run: all
 
 run_check: all
 	time ./primes | factor && time ./primes-i | factor
-	
+	rm *.o primes primes-i	
+
 all: primes steg
 
 primes: error.o	eratosthenes.o
