@@ -1,12 +1,17 @@
 CC=gcc
 Cflags = -g -std=c11 -pedantic -Wall -Wextra
 
+run: all
+	./primes && ./primes-i
+
 all: primes steg
 
 primes: error.o	eratosthenes.o
 	$(CC) $(Cflags) -lm eratosthenes.o error.o primes.c -o primes
 	$(CC) $(Cflags) -lm -DUSE_INLINE eratosthenes.o error.o primes.c -o primes-i
 
+steg:
+	
 eratosthenes.o:
 	$(CC) $(Cflags) -c eratosthenes.c
 
