@@ -1,16 +1,17 @@
 CC=gcc
 Cflags = -g -std=c11 -pedantic -Wall -Wextra
 
-all: erat_main
+all: primes steg
 
-erat_main: error.o bitset.o
-	$(CC) $(Cflags) errro.o bitset.o erat_main.c -o erat_main
+primes: error.o	eratosthenes.o
+	$(CC) $(Cflags) -lm eratosthenes.o error.o primes.c -o primes
+	$(CC) $(Cflags) -lm -DUSE_INLINE eratosthenes.o error.o primes.c -o primes-i
+
+eratosthenes.o:
+	$(CC) $(Cflags) -c eratosthenes.c
 
 error.o: error.c
 	$(CC) $(Cflags) -c error.c
 
-bitset.o: bitset.c
-	$(CC) $(Cflags) -c bitset.c
-
 clean:
-	rm *.o erat_main
+	rm *.o primes primes-i

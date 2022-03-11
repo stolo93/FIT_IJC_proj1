@@ -68,8 +68,8 @@ typedef unsigned long int bitset_index_t;
  */
 #define bitset_setbit(name, index, expr)\
         if ((index) > (_BITS_IN_LONG * bitset_size(name))) error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) (_BITS_IN_LONG * bitset_size(name)));\
-        else if (expr) name[(index) / _BITS_IN_LONG + 1] |= 1ul << _MAX_LSHIFT - (index) % _BITS_IN_LONG;\
-        else name[(index) / _BITS_IN_LONG + 1] &= ~(1ul << _MAX_LSHIFT - (index) % _BITS_IN_LONG)
+        else if (expr) name[(index) / _BITS_IN_LONG + 1] |= 1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG);\
+        else name[(index) / _BITS_IN_LONG + 1] &= ~1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG)
     
 
 /**
