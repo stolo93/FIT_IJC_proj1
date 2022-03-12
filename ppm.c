@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <string.h> //for strtok
 #include <stdlib.h>
+#include <limits.h>
 
 #include "ppm.h"
 #include "error.h"
@@ -35,7 +36,7 @@ struct ppm * ppm_read(const char * filename)
         return NULL;
     }
 
-    //TODO finish the body 
+    ppm_t * picture }
     fclose(filename);
     
     return NULL;
@@ -60,7 +61,7 @@ void ppm_free(struct ppm *p)
  * @return true 
  * @return false 
  */
-static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ysize)
+static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize)
 {
     char header[_HEADER_MAX] = {0};
     int c, word_count = 0, read_chars = 0;
@@ -135,26 +136,36 @@ static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ys
  * @return true 
  * @return false 
  */
-static bool check_p6_header(char * header, unsigned long * x, unsigned long * y)
+static bool check_p6_header(char * header, unsigned * x, unsigned * y)
 {
     const char * format = "P6";
     if (strncmp(format, strtok(header, " "), 2) != 0)
     {
-        //TODO warning_msg
+        warning_msg("File not starting with format \"P6\".\n");
         return false;
     }
-    *x = strtoul(strtok(NULL, " "),NULL, 10);
-    *y = strtoul(strtok(NULL, " "), NULL, 10);
+    unsigned long tmp_x = strtoul(strtok(NULL, " "),NULL, 10);
+    unsigned long tmp_y = strtoul(strtok(NULL, " "), NULL, 10);
+
+    //first checking if picture size in the header can be fit into unsigned int
+    if (tmp_x > UINT_MAX || tmp_y > UINT_MAX)
+    {
+        warning_msg("Picture dimensions are more than limit. Max size: %d x %d.\n", X_MAX, Y_MAX);
+        return false;        
+    }
+
+    *x = (unsigned int)tmp_x;
+    *y = (unsigned int)tmp_y;
 
     if (*x > X_MAX || *y > Y_MAX)
     {
-        //TODO warning_msg
+        warning_msg("Picture dimensions are more than limit. Max size: %d x %d.\n", X_MAX, Y_MAX);
         return false;
     }
     const char * color = "255";
     if (strncmp(color, strtok(NULL, " "), 3) != 0)
     {
-        //TODO warning_msg
+        warning_msg("Color value in the header not supported. Only supports: %d.\n", _PPM_COLOR);
         return false;
     }
     
