@@ -11,6 +11,13 @@
 #ifndef _PPM_H
 #define _PPM_H
 
+#include <stdio.h>
+#include <ctype.h> // for isspace()
+#include <stdbool.h>
+#include <string.h> //for strtok
+#include <stdlib.h>
+#include <limits.h>
+
 #define X_MAX 8000
 #define Y_MAX 8000
 #define _PPM_COLOR 255

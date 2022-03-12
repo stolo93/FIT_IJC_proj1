@@ -9,12 +9,7 @@
  * @date 2022-03-03
  */
 
-#include <stdio.h>
-#include <ctype.h> // for isspace()
-#include <stdbool.h>
-#include <string.h> //for strtok
-#include <stdlib.h>
-#include <limits.h>
+
 
 #include "ppm.h"
 #include "error.h"
