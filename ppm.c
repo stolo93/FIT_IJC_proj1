@@ -44,7 +44,7 @@ struct ppm * ppm_read(const char * filename)
         goto error_handling2;
     }
 
-    const unsigned pic_size = _RGB_PARTS * (picture -> xsize) * (picture -> ysize); 
+    const unsigned pic_size = RGB_PARTS * (picture -> xsize) * (picture -> ysize); 
     picture = realloc (picture, sizeof(ppm_t) + pic_size);
 
     int c;
@@ -118,8 +118,9 @@ static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize)
                 }
                 header[read_chars++] = delim;
                 in_word = false;
-                break;
             }
+            
+            break;
         //not in word
         case false:
             if (!isspace(c))
@@ -130,6 +131,7 @@ static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize)
                 if (word_count > _HEADER_WORDS)
                 {
                     goto finished_reading_header;
+                    break;
                 }
                 header[read_chars++] = c;
             }
