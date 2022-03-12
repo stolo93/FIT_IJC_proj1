@@ -14,14 +14,22 @@
 #include "bitset.h"
 
 //--function prototypes--
-extern void Eratosthenes(bitset_t pole)
+extern void Eratosthenes(bitset_t pole);
 
 
 int main(int argc, char ** argv)
 {
     ppm_t * pic = ppm_read(argv[1]);
     
-    bitset_alloc(primes, (pic -> xsize) * (pic -> ysize) * RGB_PARTS);
+    bitset_alloc(primes, X_MAX * Y_MAX * RGB_PARTS);
+    if (primes == NULL)
+    {
+        free(pic);
+        error_exit("Ran out of space, while allocating for primes bitset.\n");
+    }
+    
+    Eratosthenes(primes);
+
     
     ppm_free(pic);
     return 0;
