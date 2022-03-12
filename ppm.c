@@ -9,38 +9,84 @@
  * @date 2022-03-03
  */
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdbool.h>
-#include <string.h>
+
 
 #include "ppm.h"
 #include "error.h"
 
 #define _HEADER_MAX 50
 #define _HEADER_WORDS 4
+#define _RGB_PARTS 3
+
+//---prototypes of the auxiliary functions used in this module---
+static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize);
+static bool check_p6_header(char * header, unsigned * x, unsigned * y);
+
 
 struct ppm * ppm_read(const char * filename)
 {
     FILE * ppm_file = fopen(filename, "r");
     if (ppm_file == NULL)
     {
-        warning_msg("File was not open successfully.");
+        warning_msg("File was not open successfully.\n");
         return NULL;
     }
 
-    //TODO finish the body 
-    fclose(filename);
+    ppm_t * picture = malloc(sizeof(ppm_t));
+    if (picture == NULL)
+    {
+        warning_msg("Ran out of space while allocating for ppm struct.\n");
+        goto error_handling1;
+    }
+
+    if (get_p6_header(ppm_file, &(picture -> xsize), &(picture -> ysize)) == false)
+    {
+        warning_msg("Header not formated correctly.\n");
+        goto error_handling2;
+    }
+
+    const unsigned pic_size = _RGB_PARTS * (picture -> xsize) * (picture -> ysize); 
+    picture = realloc (picture, sizeof(ppm_t) + pic_size);
+
+    int c;
+    unsigned read_bytes = 0;
+    while((c = getc(ppm_file)) != EOF)
+    {
+        picture -> data[read_bytes++] = c;
+    }
+
+    fclose(ppm_file);
+    return picture;
+
+    error_handling2:
+    free(picture);
+
+    error_handling1:
+    fclose(ppm_file);
     
     return NULL;
 }
 
 void ppm_free(struct ppm *p)
 {
-    
+    free(p);
 }
 
-static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ysize)
+
+
+//------auxiliary functions only for this module-----
+
+/**
+ * @brief Get the file header in P6 format without comments
+ * and store picture size in "xsize" and "ysize"
+ * 
+ * @param file 
+ * @param xsize 
+ * @param ysize 
+ * @return true 
+ * @return false 
+ */
+static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize)
 {
     char header[_HEADER_MAX] = {0};
     int c, word_count = 0, read_chars = 0;
@@ -101,30 +147,51 @@ static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ys
     if (check_p6_header(header, xsize, ysize)){
         return true;
     }
-
-    return false;
+    
+    fclose(file);
+    error_exit("Incorect format.");
 }
 
-static bool check_p6_header(char * header, unsigned long * x, unsigned long * y)
+/**
+ * @brief check correctness of the P6 file header with color 255 given in argument "header"
+ * and store picture sizes from header into "x" and "z"
+ * 
+ * @param header 
+ * @param x 
+ * @param y 
+ * @return true 
+ * @return false 
+ */
+static bool check_p6_header(char * header, unsigned * x, unsigned * y)
 {
     const char * format = "P6";
     if (strncmp(format, strtok(header, " "), 2) != 0)
     {
-        //TODO warning_msg
+        // warning_msg("File not starting with format \"P6\".\n");
         return false;
     }
-    *x = strtoul(strtok(NULL, " "),NULL, 10);
-    *y = strtoul(strtok(NULL, " "), NULL, 10);
+    unsigned long tmp_x = strtoul(strtok(NULL, " "),NULL, 10);
+    unsigned long tmp_y = strtoul(strtok(NULL, " "), NULL, 10);
+
+    //first checking if picture size in the header can be fit into unsigned int
+    if (tmp_x > UINT_MAX || tmp_y > UINT_MAX)
+    {
+        // warning_msg("Picture dimensions are more than limit. Max size: %d x %d.\n", X_MAX, Y_MAX);
+        return false;        
+    }
+
+    *x = (unsigned int)tmp_x;
+    *y = (unsigned int)tmp_y;
 
     if (*x > X_MAX || *y > Y_MAX)
     {
-        //TODO warning_msg
+        // warning_msg("Picture dimensions are more than limit. Max size: %d x %d.\n", X_MAX, Y_MAX);
         return false;
     }
     const char * color = "255";
     if (strncmp(color, strtok(NULL, " "), 3) != 0)
     {
-        //TODO warning_msg
+        // warning_msg("Color value in the header not supported. Only supports: %d.\n", _PPM_COLOR);
         return false;
     }
     
