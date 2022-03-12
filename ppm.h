@@ -20,7 +20,7 @@
 
 #define X_MAX 8000
 #define Y_MAX 8000
-#define _PPM_COLOR 255
+#define RGB_PARTS 3
 
 typedef struct ppm {
         unsigned xsize;
