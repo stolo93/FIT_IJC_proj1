@@ -11,6 +11,7 @@ test_*
 #executables
 primes
 primes-i
+steg-decode
 
 #valgrind files
 vgcore.*
