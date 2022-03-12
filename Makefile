@@ -16,10 +16,10 @@ primes: error.o	eratosthenes.o primes.o
 
 steg:
 
-primes.o:
+primes.o: primes.c
 	$(CC) $(Cflags) -c primes.c
 
-eratosthenes.o:
+eratosthenes.o: eratosthenes.c
 	$(CC) $(Cflags) -c eratosthenes.c
 
 error.o: error.c
