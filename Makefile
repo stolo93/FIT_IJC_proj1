@@ -33,4 +33,4 @@ ppm.o: ppm.c
 	$(CC) $(Cflags) -c ppm.c
 
 clean:
-	rm *.o primes primes-i
+	rm *.o primes primes-i steg-decode
