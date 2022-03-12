@@ -16,7 +16,6 @@
 
 #define _HEADER_MAX 50
 #define _HEADER_WORDS 4
-#define _RGB_PARTS 3
 
 //---prototypes of the auxiliary functions used in this module---
 static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize);
@@ -149,7 +148,7 @@ static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize)
     }
     
     fclose(file);
-    error_exit("Incorect format.");
+    error_exit("Incorect format.\n");
 }
 
 /**
