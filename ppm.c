@@ -149,7 +149,7 @@ static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize)
     }
     
     fclose(file);
-    error_exit("Incorect format.");
+    error_exit("Incorect format.\n");
 }
 
 /**
