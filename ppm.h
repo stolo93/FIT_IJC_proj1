@@ -38,28 +38,4 @@ struct ppm * ppm_read(const char * filename);
  */
 void ppm_free(struct ppm *p);
 
-/**
- * @brief Get the file header in P6 format without comments
- * and store picture size in "xsize" and "ysize"
- * 
- * @param file 
- * @param xsize 
- * @param ysize 
- * @return true 
- * @return false 
- */
-static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ysize);
-
-/**
- * @brief check correctness of the P6 file header with color 255 given in argument "header"
- * and store picture sizes from header into "x" and "z"
- * 
- * @param header 
- * @param x 
- * @param y 
- * @return true 
- * @return false 
- */
-static bool check_p6_header(char * header, unsigned long * x, unsigned long * y);
-
 #endif //_PPM_H

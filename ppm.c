@@ -10,15 +10,21 @@
  */
 
 #include <stdio.h>
-#include <ctype.h>
+#include <ctype.h> // for isspace()
 #include <stdbool.h>
-#include <string.h>
+#include <string.h> //for strtok
+#include <stdlib.h>
 
 #include "ppm.h"
 #include "error.h"
 
 #define _HEADER_MAX 50
 #define _HEADER_WORDS 4
+
+//---prototypes of the auxiliary functions used in this module---
+static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ysize);
+static bool check_p6_header(char * header, unsigned long * x, unsigned long * y);
+
 
 struct ppm * ppm_read(const char * filename)
 {
@@ -40,6 +46,20 @@ void ppm_free(struct ppm *p)
     
 }
 
+
+
+//------auxiliary functions only for this module-----
+
+/**
+ * @brief Get the file header in P6 format without comments
+ * and store picture size in "xsize" and "ysize"
+ * 
+ * @param file 
+ * @param xsize 
+ * @param ysize 
+ * @return true 
+ * @return false 
+ */
 static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ysize)
 {
     char header[_HEADER_MAX] = {0};
@@ -105,6 +125,16 @@ static bool get_p6_header(FILE * file, unsigned long * xsize, unsigned long * ys
     return false;
 }
 
+/**
+ * @brief check correctness of the P6 file header with color 255 given in argument "header"
+ * and store picture sizes from header into "x" and "z"
+ * 
+ * @param header 
+ * @param x 
+ * @param y 
+ * @return true 
+ * @return false 
+ */
 static bool check_p6_header(char * header, unsigned long * x, unsigned long * y)
 {
     const char * format = "P6";
