@@ -1,6 +1,8 @@
 CC=gcc
 Cflags = -g -std=c11 -pedantic -Wall -Wextra
 
+all: primes steg
+
 run: all
 	./primes && ./primes-i
 
@@ -8,13 +10,14 @@ run_check: all
 	time ./primes | factor && time ./primes-i | factor
 	rm *.o primes primes-i	
 
-all: primes steg
-
-primes: error.o	eratosthenes.o
-	$(CC) $(Cflags) -lm eratosthenes.o error.o primes.c -o primes
-	$(CC) $(Cflags) -lm -DUSE_INLINE eratosthenes.o error.o primes.c -o primes-i
+primes: error.o	eratosthenes.o primes.o
+	$(CC) $(Cflags) -lm eratosthenes.o error.o primes.o -o primes
+	$(CC) $(Cflags) -lm -DUSE_INLINE eratosthenes.o error.o primes.o -o primes-i
 
 steg:
+
+primes.o:
+	$(CC) $(Cflags) -c primes.c
 
 eratosthenes.o:
 	$(CC) $(Cflags) -c eratosthenes.c
