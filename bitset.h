@@ -68,7 +68,7 @@ typedef unsigned long int bitset_index_t;
  * in case of error, only frees "name" and than calls error_exit()
  */
 #define bitset_setbit(name, index, expr)\
-        if ((index) > (_BITS_IN_LONG * bitset_size(name))) {bitset_free(name); error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) (_BITS_IN_LONG * bitset_size(name)));}\
+        if ((index) > (bitset_size(name))) {bitset_free(name); error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) (_BITS_IN_LONG * bitset_size(name)));}\
         else if (expr) name[(index) / _BITS_IN_LONG + 1] |= 1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG);\
         else name[(index) / _BITS_IN_LONG + 1] &= ~1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG)
     
@@ -80,7 +80,7 @@ typedef unsigned long int bitset_index_t;
  * in case of error, only frees "name" and than calls error_exit()
  */
 #define bitset_getbit(name, index)\
-    ((index > _BITS_IN_LONG * bitset_size(name)) ?\
+    ((index > bitset_size(name)) ?\
     (bitset_free(name), error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long)(_BITS_IN_LONG * bitset_size(name))),0):\
     ((name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - ((index) % _BITS_IN_LONG))) ? 1 : 0))
 
@@ -127,11 +127,10 @@ extern inline bitset_index_t bitset_size(bitset_t name)
  */
 extern inline void bitset_setbit(bitset_t name, bitset_index_t index, bool expr)
 {
-    bitset_index_t max_index = bitset_size(name) * _BITS_IN_LONG;
     bitset_index_t index_real = (index) / _BITS_IN_LONG + 1;
     unsigned int index_offset = _MAX_LSHIFT - (index) % _BITS_IN_LONG;
 
-    if (index > max_index)
+    if (index > bitset_size(name))
     {
         bitset_free(name);
         error_exit("Index: %lu is higher than the max index: %lu.\n", index, max_index);
@@ -158,8 +157,7 @@ extern inline void bitset_setbit(bitset_t name, bitset_index_t index, bool expr)
  */
 extern inline bool bitset_getbit(bitset_t name, bitset_index_t index)
 {
-    bitset_index_t max_index = _BITS_IN_LONG * bitset_size(name);
-    if (index > max_index)
+    if (index > bitset_size(name))
     {
         free(name);
         error_exit("Index: %lu is higher than max index: (%lu)\n",index, max_index);
