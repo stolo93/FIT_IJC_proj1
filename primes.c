@@ -24,6 +24,8 @@ extern void Eratosthenes(bitset_t pole);
 
 int main()
 {
+    clock_t start = clock();
+
     bitset_alloc(primes, CNT_PRIMES);
     Eratosthenes(primes);
 
@@ -31,7 +33,7 @@ int main()
 
     bitset_free(primes);
 
-    fprintf(stderr, "%lu\n", clock()/CLOCKS_PER_SEC);
+    fprintf(stderr, "Time=%.3g\n", (double)(clock()-start)/CLOCKS_PER_SEC);
     return 0;
 }
 
