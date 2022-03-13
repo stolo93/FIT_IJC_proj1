@@ -11,6 +11,7 @@
  */
 
 #include <stdio.h>
+#include <time.h>
 
 #include "bitset.h"
 
@@ -29,6 +30,8 @@ int main()
     print_primes(primes, PRT_PRIMES);
 
     bitset_free(primes);
+
+    fprintf(stderr, "%lu\n", clock()/CLOCKS_PER_SEC);
     return 0;
 }
 
