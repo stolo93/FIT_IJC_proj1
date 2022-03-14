@@ -1,12 +1,13 @@
 CC=gcc
 CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
 CLIBS = -lm
+XLOG = xstola03
 
 all: primes steg-decode
 
-run: all
-	./primes && ./primes-i
-	./steg-decode du1-obrazek.ppm
+run: primes
+	./primes
+	./primes-i
 
 primes: error.o	eratosthenes.o primes.o
 	$(CC) $(CFLAGS) $(CLIBS) $^ -o $@
@@ -19,7 +20,7 @@ steg-decode: steg-decode.o ppm.o eratosthenes.o error.o
 	$(CC) $(CFLAGS) -c $^
 
 zip: *.c *.h Makefile
-	$@ xstola03.$@ $^
+	$@ $(XLOG).$@ $^
 
 clean:
 	rm *.o primes primes-i steg-decode
