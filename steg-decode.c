@@ -14,6 +14,7 @@
 #include "bitset.h"
 
 //--function prototypes--
+
 extern void Eratosthenes(bitset_t pole);
 
 
@@ -28,6 +29,7 @@ int main(int argc, char ** argv)
 
     unsigned long pic_size = pic -> xsize * pic -> ysize * RGB_PARTS;
     bitset_alloc(primes, pic_size);
+    
     if (primes == NULL)
     {
         free(pic);
@@ -49,7 +51,7 @@ int main(int argc, char ** argv)
     int bit_count = 0;
 
     for (bitset_index_t i = 29; i <= pic_size; i++){
-        if (bitset_getbit(primes, i))
+        if (!bitset_getbit(primes, i))
         {
             if (bit_count == 8)
             {
@@ -72,6 +74,7 @@ int main(int argc, char ** argv)
                     error_exit("Ran out of space while reallocating space for message.\n");
                 }
             }
+            //part that stores single bits into bytes
             char tmp = pic -> data[i] & 1u;
             message[stored_chars] |= (tmp << bit_count++);
         }
