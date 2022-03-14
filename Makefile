@@ -9,7 +9,8 @@ run: all
 
 run_check: all
 	time ./primes | factor && time ./primes-i | factor
-	rm *.o primes primes-i	
+	./steg-decode du1-obrazek.ppm
+	rm *.o primes primes-i	steg-decode
 
 primes: error.o	eratosthenes.o primes.o
 	$(CC) $(Cflags) -lm eratosthenes.o error.o primes.o -o primes
@@ -32,6 +33,9 @@ steg-decode.o: steg-decode.c
 
 ppm.o: ppm.c
 	$(CC) $(Cflags) -c ppm.c
+
+zip: *.c *.h Makefile
+	zip xstola03.zip *.c *.h Makefile
 
 clean:
 	rm *.o primes primes-i steg-decode
