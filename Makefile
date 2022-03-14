@@ -5,6 +5,7 @@ all: primes steg
 
 run: all
 	./primes && ./primes-i
+	./steg-decode du1-obrazek.ppm
 
 run_check: all
 	time ./primes | factor && time ./primes-i | factor
