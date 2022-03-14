@@ -68,7 +68,7 @@ typedef unsigned long int bitset_index_t;
  * in case of error, only frees "name" and than calls error_exit()
  */
 #define bitset_setbit(name, index, expr)\
-        if ((index) > (bitset_size(name))) {bitset_free(name); error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long) (_BITS_IN_LONG * bitset_size(name)));}\
+        if ((index) > (bitset_size(name))) {bitset_free(name); error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name)));}\
         else if (expr) name[(index) / _BITS_IN_LONG + 1] |= 1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG);\
         else name[(index) / _BITS_IN_LONG + 1] &= ~1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG)
     
@@ -81,21 +81,10 @@ typedef unsigned long int bitset_index_t;
  */
 #define bitset_getbit(name, index)\
     ((index > bitset_size(name)) ?\
-    (bitset_free(name), error_exit("Index: %lu is higher than max index: (%lu)\n", (unsigned long) (index), (unsigned long)(_BITS_IN_LONG * bitset_size(name))),0):\
+    (bitset_free(name), error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name))),0):\
     ((name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - ((index) % _BITS_IN_LONG))) ? 1 : 0))
 
 #else //USE_INLINE
-
-//TODO are this functions even meaningfull  ?
-// inline bitset_t bitset_create(/*TODO type*/ name, bitset_index_t size)
-// {
-// 
-// }
-
-// inline bitset_t bitset_alloc(/*TODO type*/ name, bitset_index_t size)
-// {
-// 
-// }
 
 /**
  * @brief free memmory allocated by bitset_alloc pointed to by "name"
@@ -133,7 +122,7 @@ extern inline void bitset_setbit(bitset_t name, bitset_index_t index, bool expr)
     if (index > bitset_size(name))
     {
         bitset_free(name);
-        error_exit("Index: %lu is higher than the max index: %lu.\n", index, max_index);
+        error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name)));
     }
 
     if (expr)
@@ -160,7 +149,7 @@ extern inline bool bitset_getbit(bitset_t name, bitset_index_t index)
     if (index > bitset_size(name))
     {
         free(name);
-        error_exit("Index: %lu is higher than max index: (%lu)\n",index, max_index);
+        error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name)));
     }
     else
     {
