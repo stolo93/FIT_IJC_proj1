@@ -82,7 +82,7 @@ int main(int argc, char ** argv)
     }
 
     message = realloc(message, stored_chars); //shrinking the message size according to number of stored chars
-    printf("stored chars: %u\n", stored_chars);
+
     for (unsigned i = 0; message[i]; i++)
     {
         putchar(message[i]);
