@@ -9,6 +9,9 @@
  * @date 2022-03-03
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "ppm.h"
 #include "error.h"
 #include "bitset.h"
@@ -29,7 +32,7 @@ int main(int argc, char ** argv)
 
     unsigned long pic_size = pic -> xsize * pic -> ysize * RGB_PARTS;
     bitset_alloc(primes, pic_size);
-    
+
     if (primes == NULL)
     {
         free(pic);
@@ -55,6 +58,7 @@ int main(int argc, char ** argv)
         {
             if (bit_count == 8)
             {
+                if (message[stored_chars] == '\0') break;   //finish reading if '\000' has been read
                 bit_count = 0;
                 stored_chars++;
             }
@@ -79,14 +83,15 @@ int main(int argc, char ** argv)
             message[stored_chars] |= (tmp << bit_count++);
         }
     }
-    
-    bitset_free(primes);
 
+    message = realloc(message, stored_chars); //shrinking the message size according to number of stored chars
+    printf("stored chars: %u\n", stored_chars);
     for (unsigned i = 0; message[i]; i++)
     {
         putchar(message[i]);
     }
-    
+
+    bitset_free(primes);
     free(message);
     ppm_free(pic);
     return 0;
