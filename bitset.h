@@ -39,8 +39,8 @@ typedef unsigned long int bitset_index_t;
  * called name with size size + 1, to store the size
  * initializes the bitfield with zeroes and stores size in the 0th index
  */
-//TODO assert(size < MAXSIZE);
 #define bitset_alloc(name, size)\
+    assert(size < ULONG_MAX);\
     bitset_t name = calloc(((size / _BITS_IN_LONG) + ((size % _BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
     name[0] = (size);\
 
