@@ -40,7 +40,7 @@ typedef unsigned long int bitset_index_t;
  * initializes the bitfield with zeroes and stores size in the 0th index
  */
 #define bitset_alloc(name, size)\
-    static_assert(size > 0, "Can not allocate bitset with size less than zero");\
+    //TODO assert(size < MAXSIZE);
     bitset_t name = calloc(((size / _BITS_IN_LONG) + ((size % _BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
     name[0] = (size);\
 
