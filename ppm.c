@@ -14,8 +14,8 @@
 #include "ppm.h"
 #include "error.h"
 
-#define _HEADER_MAX 50
-#define _HEADER_WORDS 4
+#define _HEADER_MAX 50 //maximum lenght of the header after deleting consequent white spaces
+#define _HEADER_WORDS 4 //expected number of word in the header
 
 //---prototypes of the auxiliary functions used in this module---
 static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize);

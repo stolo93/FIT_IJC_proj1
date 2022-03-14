@@ -18,7 +18,7 @@
 
 //--function prototypes--
 
-extern void Eratosthenes(bitset_t pole);
+extern void Eratosthenes(bitset_t array);
 
 
 int main(int argc, char ** argv)
@@ -52,12 +52,13 @@ int main(int argc, char ** argv)
     unsigned stored_chars = 0;
     int bit_count = 0;
 
+    //store LSB from bytes at prime number indexes starting with 29 (given in assignment)
     for (bitset_index_t i = 29; i <= pic_size; i++){
         if (!bitset_getbit(primes, i))
         {
-            if (bit_count == 8)
+            if (bit_count == 8) //if we already set full byte it's time to move on
             {
-                if (message[stored_chars] == '\0') break;   //finish reading if '\000' has been read
+                if (message[stored_chars] == '\0') break;   //finish reading if '\0' has been read
                 bit_count = 0;
                 stored_chars++;
             }
@@ -75,24 +76,40 @@ int main(int argc, char ** argv)
                     goto error_handling3;
                 }
             }
-            //part that stores single bits into bytes
+            //part that actually stores the single bits into the byte
             char tmp = pic -> data[i] & 1u;
             message[stored_chars] |= (tmp << bit_count++);
         }
     }
+    
+    if (message[stored_chars] != '\0')
+    {
+        warning_msg("Message doesn't end with '\0'.\n");
+        goto error_handling3;
+    }
 
     message = realloc(message, stored_chars); //shrinking the message size according to number of stored chars
 
-    for (unsigned i = 0; message[i]; i++)
+    for (unsigned i = 0; message[i]; i++) //revealing the secret message to the world
     {
         putchar(message[i]);
     }
 
+    free(message);
+    bitset_free(primes); 
+    ppm_free(pic);
+    
+    return EXIT_SUCCESS;
+
+    //in case any error occurs
     error_handling3:
     free(message);
+
     error_handling2:
-    bitset_free(primes);    
+    bitset_free(primes); 
+
     error_handling1:
     ppm_free(pic);
-    return 0;
+
+    return EXIT_FAILURE;
 }

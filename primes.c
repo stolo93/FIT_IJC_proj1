@@ -20,7 +20,7 @@
 
 //---prototypes---
 static void print_primes(const bitset_t primes, int count);
-extern void Eratosthenes(bitset_t pole);
+extern void Eratosthenes(bitset_t array);
 
 int main()
 {

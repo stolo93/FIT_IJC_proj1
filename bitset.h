@@ -6,7 +6,9 @@
  * header file containing macros and inline functions
  * needed for operations on bitsets
  * 
+ * Known issue: bitset_set() on index 0 causes a compiler warning  (0 > unsigned value)
  * @date 2022-03-01
+ * 
  */
 
 #ifndef _BITSET_H

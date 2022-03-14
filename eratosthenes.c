@@ -14,17 +14,16 @@
 
 #include "bitset.h"
 
-void Eratosthenes(bitset_t pole)
+void Eratosthenes(bitset_t array)
 {
-    //TODO fix next line in bitset.h
-    // bitset_setbit(pole, 0, 1); 
-    bitset_setbit(pole, 1, 1);
+    bitset_setbit(array, 0, 1); 
+    bitset_setbit(array, 1, 1);
 
-    for (bitset_index_t i = 2; i <= sqrt(bitset_size(pole)); i++)
+    for (bitset_index_t i = 2; i <= sqrt(bitset_size(array)); i++)
     {   
-        for (bitset_index_t j = i*i; j <= bitset_size(pole) && !bitset_getbit(pole, i); j+=i)
+        for (bitset_index_t j = i*i; j <= bitset_size(array) && !bitset_getbit(array, i); j+=i)
         {
-            bitset_setbit(pole, j, 1);
+            bitset_setbit(array, j, 1);
         }
     }
     return;
