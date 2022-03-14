@@ -1,41 +1,25 @@
 CC=gcc
-Cflags = -g -std=c11 -pedantic -Wall -Wextra
+CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
+CLIBS = -lm
 
-all: primes steg
+all: primes steg-decode
 
 run: all
 	./primes && ./primes-i
 	./steg-decode du1-obrazek.ppm
 
-run_check: all
-	time ./primes | factor && time ./primes-i | factor
-	./steg-decode du1-obrazek.ppm
-	rm *.o primes primes-i	steg-decode
-
 primes: error.o	eratosthenes.o primes.o
-	$(CC) $(Cflags) -lm eratosthenes.o error.o primes.o -o primes
-	$(CC) $(Cflags) -lm -DUSE_INLINE eratosthenes.o error.o primes.o -o primes-i
+	$(CC) $(CFLAGS) $(CLIBS) $^ -o $@
+	$(CC) $(CFLAGS) $(CLIBS) -DUSE_INLINE $^ -o $@-i
 
-steg: steg-decode.o ppm.o eratosthenes.o error.o
-	$(CC) $(Cflags) -lm steg-decode.o ppm.o eratosthenes.o error.o -o steg-decode
+steg-decode: steg-decode.o ppm.o eratosthenes.o error.o
+	$(CC) $(CFLAGS) $(CLIBS) $^ -o $@
 
-primes.o: primes.c
-	$(CC) $(Cflags) -c primes.c
-
-eratosthenes.o: eratosthenes.c
-	$(CC) $(Cflags) -c eratosthenes.c
-
-error.o: error.c
-	$(CC) $(Cflags) -c error.c
-
-steg-decode.o: steg-decode.c
-	$(CC) $(Cflags) -c steg-decode.c
-
-ppm.o: ppm.c
-	$(CC) $(Cflags) -c ppm.c
+%.o: %.c 
+	$(CC) $(CFLAGS) -c $^
 
 zip: *.c *.h Makefile
-	zip xstola03.zip *.c *.h Makefile
+	$@ xstola03.$@ $^
 
 clean:
 	rm *.o primes primes-i steg-decode
