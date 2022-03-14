@@ -29,3 +29,4 @@ Usage:
 Try running:
 > make && ./steg-decode du1-obrazek.ppm
 
+to reveal the secret message hidden in the picture
