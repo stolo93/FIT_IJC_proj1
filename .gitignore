@@ -17,4 +17,4 @@ steg-decode
 vgcore.*
 
 #zip files
-.zip
+*.zip
