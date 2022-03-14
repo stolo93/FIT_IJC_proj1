@@ -36,7 +36,7 @@ int main(int argc, char ** argv)
     
     Eratosthenes(primes);
 
-    unsigned msg_size = 100; //initial assumed size of the message
+    unsigned msg_size = 100; //assumed size of the message
     char * message = calloc(msg_size, sizeof(char));
     if (message == NULL)
     {
@@ -56,13 +56,20 @@ int main(int argc, char ** argv)
                 bit_count = 0;
                 stored_chars++;
             }
-            if (stored_chars >= msg_size)
+            if (stored_chars >= msg_size)   //reallocating message if it is longer than expected
             {
                 msg_size *= 2;
                 char * tmp = realloc(message, msg_size);
                 if (tmp != NULL)
                 {
                     message = tmp;
+                }
+                else
+                {
+                    free(message);
+                    bitset_free(primes);
+                    free(pic);
+                    error_exit("Ran out of space while reallocating space for message.\n");
                 }
             }
             char tmp = pic -> data[i] & 1u;
