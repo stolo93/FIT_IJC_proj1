@@ -18,10 +18,16 @@ extern void Eratosthenes(bitset_t pole);
 
 
 int main(int argc, char ** argv)
-{
-    ppm_t * pic = ppm_read(argv[1]);
+{   
+    if (argc != 2)
+        error_exit("No file given\n");
     
-    bitset_alloc(primes, X_MAX * Y_MAX * RGB_PARTS);
+    ppm_t * pic = ppm_read(argv[1]);
+    if (pic == NULL)
+        error_exit("Problem with reading the file\n");
+
+    unsigned long pic_size = pic -> xsize * pic -> ysize * RGB_PARTS;
+    bitset_alloc(primes, pic_size);
     if (primes == NULL)
     {
         free(pic);
@@ -30,7 +36,48 @@ int main(int argc, char ** argv)
     
     Eratosthenes(primes);
 
+    unsigned msg_size = 100; //initial assumed size of the message
+    char * message = calloc(msg_size, sizeof(char));
+    if (message == NULL)
+    {
+        free(pic);
+        bitset_free(primes);
+        error_exit("Ran out of space while allocating space for message.\n");
+    }
+
+    unsigned stored_chars = 0;
+    int bit_count = 0;
+
+    for (bitset_index_t i = 29; i <= pic_size; i++){
+        if (bitset_getbit(primes, i))
+        {
+            if (bit_count == 8)
+            {
+                bit_count = 0;
+                stored_chars++;
+            }
+            if (stored_chars >= msg_size)
+            {
+                msg_size *= 2;
+                char * tmp = realloc(message, msg_size);
+                if (tmp != NULL)
+                {
+                    message = tmp;
+                }
+            }
+            char tmp = pic -> data[i] & 1u;
+            message[stored_chars] |= (tmp << bit_count++);
+        }
+    }
     
+    bitset_free(primes);
+
+    for (unsigned i = 0; message[i]; i++)
+    {
+        putchar(message[i]);
+    }
+    
+    free(message);
     ppm_free(pic);
     return 0;
 }
