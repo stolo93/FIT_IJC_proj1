@@ -35,8 +35,8 @@ int main(int argc, char ** argv)
 
     if (primes == NULL)
     {
-        free(pic);
-        error_exit("Ran out of space, while allocating for primes bitset.\n");
+        warning_msg("Ran out of space, while allocating for primes bitset.\n");
+        goto error_handling1;
     }
     
     Eratosthenes(primes);
@@ -45,9 +45,8 @@ int main(int argc, char ** argv)
     char * message = calloc(msg_size, sizeof(char));
     if (message == NULL)
     {
-        free(pic);
-        bitset_free(primes);
-        error_exit("Ran out of space while allocating space for message.\n");
+        warning_msg("Ran out of space while allocating space for message.\n");
+        goto error_handling2;
     }
 
     unsigned stored_chars = 0;
@@ -72,10 +71,8 @@ int main(int argc, char ** argv)
                 }
                 else
                 {
-                    free(message);
-                    bitset_free(primes);
-                    free(pic);
-                    error_exit("Ran out of space while reallocating space for message.\n");
+                    warning_msg("Ran out of space while reallocating space for message.\n");
+                    goto error_handling3;
                 }
             }
             //part that stores single bits into bytes
@@ -91,8 +88,11 @@ int main(int argc, char ** argv)
         putchar(message[i]);
     }
 
-    bitset_free(primes);
+    error_handling3:
     free(message);
+    error_handling2:
+    bitset_free(primes);    
+    error_handling1:
     ppm_free(pic);
     return 0;
 }
