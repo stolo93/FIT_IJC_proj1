@@ -149,6 +149,7 @@ static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize)
         return true;
     }
     
+    //the function will get here only in case of incorrect header format
     fclose(file);
     error_exit("Incorect format.\n");
 }
