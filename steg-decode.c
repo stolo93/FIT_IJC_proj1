@@ -11,10 +11,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include "ppm.h"
 #include "error.h"
 #include "bitset.h"
+
+#define MSG_START_IDX 29
 
 //--function prototypes--
 
@@ -53,10 +56,10 @@ int main(int argc, char ** argv)
     int bit_count = 0;
 
     //store LSB from bytes at prime number indexes starting with 29 (given in assignment)
-    for (bitset_index_t i = 29; i <= pic_size; i++){
+    for (bitset_index_t i = MSG_START_IDX; i <= pic_size; i++){
         if (!bitset_getbit(primes, i))
         {
-            if (bit_count == 8) //if we already set full byte it's time to move on
+            if (bit_count == CHAR_BIT) //if we already set full byte it's time to move on
             {
                 if (message[stored_chars] == '\0') break;   //finish reading if '\0' has been read
                 bit_count = 0;
