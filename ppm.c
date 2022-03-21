@@ -18,6 +18,7 @@
 #define _HEADER_WORDS 4 //expected number of word in the header
 
 //---prototypes of the auxiliary functions used in this module---
+
 static bool get_p6_header(FILE * file, unsigned * xsize, unsigned * ysize);
 static bool check_p6_header(char * header, unsigned * x, unsigned * y);
 
