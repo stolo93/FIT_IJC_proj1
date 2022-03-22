@@ -76,6 +76,11 @@ int main(int argc, char ** argv)
                 }
                 message = tmp;
                 
+                memset(message + stored_chars, 0, msg_size - stored_chars);
+                //this is required to set all new bytes to zero after reallocating
+                //at the same time we need to protect bytes which were set while deconding the message
+                //begining of the memory we want to set to 0 is at message (start of the memory block) but we need to ofset it by the number of chars that we already stored
+                //number of bytes we need to zero out is msg_size - stored_chars
             }
 
             //part that actually stores the single bits into the byte
