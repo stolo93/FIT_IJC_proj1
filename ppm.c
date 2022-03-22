@@ -53,7 +53,14 @@ struct ppm * ppm_read(const char * filename)
     }
 
     const unsigned pic_size = RGB_PARTS * (picture -> xsize) * (picture -> ysize);
-    picture = realloc (picture, sizeof(ppm_t) + pic_size);
+    ppm_t * tmp = realloc (picture, sizeof(ppm_t) + pic_size);
+    if (tmp == NULL)
+    {
+        warning_msg("Ran out of memmory.\n");
+        goto error_handling2;
+
+    }
+    picture = tmp;
 
     int c;
     unsigned read_bytes = 0;

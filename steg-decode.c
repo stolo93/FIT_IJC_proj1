@@ -69,16 +69,15 @@ int main(int argc, char ** argv)
             {
                 msg_size *= 2;
                 char * tmp = realloc(message, msg_size);
-                if (tmp != NULL)
-                {
-                    message = tmp;
-                }
-                else
+                if (tmp == NULL)
                 {
                     warning_msg("Ran out of space while reallocating space for message.\n");
                     goto error_handling3;
                 }
+                message = tmp;
+                
             }
+
             //part that actually stores the single bits into the byte
             char tmp = pic -> data[i] & 1u;
             message[stored_chars] |= (tmp << bit_count++);
@@ -90,8 +89,15 @@ int main(int argc, char ** argv)
         warning_msg("Message doesn't end with '\0'.\n");
         goto error_handling3;
     }
+    
+    char * tmp = realloc(message, stored_chars); //shrinking the message size according to number of stored chars
+    if (tmp == NULL)
+    {
+        warning_msg("Message doesn't end with '\0'.\n");
+        goto error_handling3;
+    }
+    message = tmp;
 
-    message = realloc(message, stored_chars); //shrinking the message size according to number of stored chars
 
     for (unsigned i = 0; message[i]; i++) //revealing the secret message to the world
     {

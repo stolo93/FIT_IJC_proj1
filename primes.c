@@ -27,6 +27,10 @@ int main()
     clock_t start = clock();
 
     bitset_alloc(primes, CNT_PRIMES);
+    if (primes == NULL)
+    {
+        error_exit("Ran out of memmory while allocating bitset for prime numbers.");
+    }
     Eratosthenes(primes);
 
     print_primes(primes, PRT_PRIMES);
