@@ -19,8 +19,8 @@ steg-decode: steg-decode.o ppm.o eratosthenes.o error.o
 %.o: %.c 
 	$(CC) $(CFLAGS) -c $^
 
-zip: all *.c *.h Makefile
-	$@ $(XLOG).$@ *.c *.h Makefile
+zip: *.c *.h Makefile
+	$@ $(XLOG).$@ $^
 
 clean:
 	rm *.o primes primes-i steg-decode
