@@ -33,8 +33,8 @@ typedef unsigned long int bitset_index_t;
  * initializes the bitfield with zeroes and stores size in the 0th index
  */
 #define bitset_create(name, size)\
-    static_assert(size > 0, "Can not create bitset with size less than zero");\
-    unsigned long int name[((size) / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1] = {[0] = (size), 0};\
+    static_assert((size) > 0, "Can not create bitset with size less than zero");\
+    unsigned long int name[((size) / BITS_IN_LONG) + (((size) % BITS_IN_LONG) ? 1 : 0) + 1] = {[0] = (size), 0};\
 
 /**
  * @brief create a dynamicaly allocated bitset 
@@ -42,8 +42,8 @@ typedef unsigned long int bitset_index_t;
  * initializes the bitfield with zeroes and stores size in the 0th index
  */
 #define bitset_alloc(name, size)\
-    assert(size < ULONG_MAX);\
-    bitset_t name = calloc((((size) / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
+    assert((size) < ULONG_MAX);\
+    bitset_t name = calloc((((size) / BITS_IN_LONG) + (((size) % BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
     name[0] = (size);\
 
 #ifndef USE_INLINE
