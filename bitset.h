@@ -34,7 +34,7 @@ typedef unsigned long int bitset_index_t;
  */
 #define bitset_create(name, size)\
     static_assert(size > 0, "Can not create bitset with size less than zero");\
-    unsigned long int name[(size / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1] = {[0] = (size), 0};\
+    unsigned long int name[((size) / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1] = {[0] = (size), 0};\
 
 /**
  * @brief create a dynamicaly allocated bitset 
@@ -43,7 +43,7 @@ typedef unsigned long int bitset_index_t;
  */
 #define bitset_alloc(name, size)\
     assert(size < ULONG_MAX);\
-    bitset_t name = calloc(((size / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
+    bitset_t name = calloc((((size) / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
     name[0] = (size);\
 
 #ifndef USE_INLINE

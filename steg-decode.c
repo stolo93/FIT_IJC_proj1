@@ -38,7 +38,7 @@ int main(int argc, char ** argv)
 
     if (primes == NULL)
     {
-        warning_msg("Ran out of space, while allocating for primes bitset.\n");
+        warning_msg("bitset_alloc: Chyba alokace paměti.\n");
         goto error_handling1;
     }
     
