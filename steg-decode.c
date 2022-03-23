@@ -94,7 +94,6 @@ int main(int argc, char ** argv)
         warning_msg("Message doesn't end with '\0'.\n");
         goto error_handling3;
     }
-    message[stored_chars] = '\n';
     
     char * tmp = realloc(message, stored_chars); //shrinking the message size according to number of stored chars
     if (tmp == NULL)
@@ -109,6 +108,8 @@ int main(int argc, char ** argv)
     {
         putchar(message[i]);
     }
+    
+    putchar('\n');
 
     free(message);
     bitset_free(primes); 
