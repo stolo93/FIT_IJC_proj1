@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS = -g -std=c11 -pedantic -Wall -Wextra
+CFLAGS = -m32 -g -std=c11 -pedantic -Wall -Wextra
 LDFLAGS = -lm
 XLOG = xstola03
 

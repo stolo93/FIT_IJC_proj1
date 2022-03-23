@@ -8,7 +8,7 @@
  * 
  * @date 2022-03-08
  */
-#define ODD_NUMS_64 0xAAAAAAAAAAAAAAAAul
+#define ODD_NUMS_64 0xAAAAAAAAAAAAAAAAul //this causes a warning while compiling with -m32 but it doesn't matter as we don't use the value in 32 bit mode
 #define ODD_NUMS_32 0xAAAAAAAAul
 
 #include <stdio.h>
