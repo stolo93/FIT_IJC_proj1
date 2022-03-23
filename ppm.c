@@ -51,6 +51,12 @@ struct ppm * ppm_read(const char * filename)
         warning_msg("Header not formated correctly.\n");
         goto error_handling2;
     }
+    
+    if (picture -> xsize > X_MAX || picture -> ysize > Y_MAX)
+    {
+        warning_msg("File too big.");
+        goto error_handling2;
+    }
 
     const unsigned pic_size = RGB_PARTS * (picture -> xsize) * (picture -> ysize);
     ppm_t * tmp = realloc (picture, sizeof(ppm_t) + pic_size);

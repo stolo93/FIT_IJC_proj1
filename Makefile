@@ -6,8 +6,8 @@ XLOG = xstola03
 all: primes steg-decode
 
 run: primes
-	./primes
-	./primes-i
+	ulimit -s 50000 && ./primes
+	ulimit -s 50000 && ./primes-i
 
 primes: error.o	eratosthenes.o primes.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)

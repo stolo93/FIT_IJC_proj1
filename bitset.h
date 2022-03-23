@@ -21,8 +21,8 @@
 
 #include "error.h"
 
-#define _BITS_IN_LONG (sizeof(unsigned long) * CHAR_BIT)
-#define _MAX_LSHIFT _BITS_IN_LONG - 1
+#define BITS_IN_LONG ((sizeof(unsigned long) * CHAR_BIT))
+#define _MAX_LSHIFT (BITS_IN_LONG - 1)
 
 typedef unsigned long int * bitset_t;
 typedef unsigned long int bitset_index_t;
@@ -34,7 +34,7 @@ typedef unsigned long int bitset_index_t;
  */
 #define bitset_create(name, size)\
     static_assert(size > 0, "Can not create bitset with size less than zero");\
-    unsigned long int name[(size / _BITS_IN_LONG) + ((size % _BITS_IN_LONG) ? 1 : 0) + 1] = {[0] = (size), 0};\
+    unsigned long int name[(size / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1] = {[0] = (size), 0};\
 
 /**
  * @brief create a dynamicaly allocated bitset 
@@ -43,7 +43,7 @@ typedef unsigned long int bitset_index_t;
  */
 #define bitset_alloc(name, size)\
     assert(size < ULONG_MAX);\
-    bitset_t name = calloc(((size / _BITS_IN_LONG) + ((size % _BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
+    bitset_t name = calloc(((size / BITS_IN_LONG) + ((size % BITS_IN_LONG) ? 1 : 0) + 1), sizeof(unsigned long));\
     name[0] = (size);\
 
 #ifndef USE_INLINE
@@ -60,7 +60,7 @@ typedef unsigned long int bitset_index_t;
  * 
  */
 #define bitset_size(name)\
-    name[0]
+    (name)[0]
 
 /**
  * @brief sets bit on index "index" to either 1 or 0
@@ -70,10 +70,9 @@ typedef unsigned long int bitset_index_t;
  * in case of error, only frees "name" and than calls error_exit()
  */
 #define bitset_setbit(name, index, expr)\
-        if ((index) > (bitset_size(name))) {bitset_free(name); error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name)));}\
-        else if (expr) name[(index) / _BITS_IN_LONG + 1] |= 1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG);\
-        else name[(index) / _BITS_IN_LONG + 1] &= ~1ul << (_MAX_LSHIFT - (index) % _BITS_IN_LONG)
-    
+        if ((index) > (bitset_size((name)))) {bitset_free((name)); error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(BITS_IN_LONG * bitset_size(name)));}\
+        else if (expr) (name)[(index) / BITS_IN_LONG + 1] |= 1ul << (_MAX_LSHIFT - (index) % BITS_IN_LONG);\
+        else (name)[(index) / BITS_IN_LONG + 1] &= ~(1ul << (_MAX_LSHIFT - (index) % BITS_IN_LONG))
 
 /**
  * @brief returns value bit in "name" on "index"
@@ -82,9 +81,9 @@ typedef unsigned long int bitset_index_t;
  * in case of error, only frees "name" and than calls error_exit()
  */
 #define bitset_getbit(name, index)\
-    ((index > bitset_size(name)) ?\
-    (bitset_free(name), error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name))),0):\
-    ((name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - ((index) % _BITS_IN_LONG))) ? 1 : 0))
+    (((index) > bitset_size((name))) ?\
+    (bitset_free((name)), error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(BITS_IN_LONG * bitset_size(name))),0):\
+    (((name)[(index)/BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - ((index) % BITS_IN_LONG))) ? 1 : 0))
 
 #else //USE_INLINE
 
@@ -118,13 +117,13 @@ extern inline bitset_index_t bitset_size(bitset_t name)
  */
 extern inline void bitset_setbit(bitset_t name, bitset_index_t index, bool expr)
 {
-    bitset_index_t index_real = (index) / _BITS_IN_LONG + 1;
-    unsigned int index_offset = _MAX_LSHIFT - (index) % _BITS_IN_LONG;
+    bitset_index_t index_real = (index) / BITS_IN_LONG + 1;
+    unsigned int index_offset = _MAX_LSHIFT - (index) % BITS_IN_LONG;
 
     if (index > bitset_size(name))
     {
         bitset_free(name);
-        error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name)));
+        error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(BITS_IN_LONG * bitset_size(name)));
     }
 
     if (expr)
@@ -151,11 +150,11 @@ extern inline bool bitset_getbit(bitset_t name, bitset_index_t index)
     if (index > bitset_size(name))
     {
         free(name);
-        error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(_BITS_IN_LONG * bitset_size(name)));
+        error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu", (unsigned long)(index), (unsigned long)(BITS_IN_LONG * bitset_size(name)));
     }
     else
     {
-        return (name[(index)/_BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - (index % _BITS_IN_LONG))) ? true : false;
+        return (name[(index)/BITS_IN_LONG +1] & 1ul << (_MAX_LSHIFT - (index % BITS_IN_LONG))) ? true : false;
     }
 }
 

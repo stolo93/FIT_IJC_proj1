@@ -14,28 +14,26 @@
 #include <time.h>
 
 #include "bitset.h"
-
-#define CNT_PRIMES 300000000 //primes less than 
+#include "error.h"
+//300000000
+#define CNT_PRIMES 300000000//primes less than 
 #define PRT_PRIMES 10 //how many primes to print
 
 //---prototypes---
+
 static void print_primes(const bitset_t primes, int count);
 extern void Eratosthenes(bitset_t array);
+
 
 int main()
 {
     clock_t start = clock();
 
-    bitset_alloc(primes, CNT_PRIMES);
-    if (primes == NULL)
-    {
-        error_exit("Ran out of memmory while allocating bitset for prime numbers.");
-    }
+    bitset_create(primes, CNT_PRIMES);
+
     Eratosthenes(primes);
 
     print_primes(primes, PRT_PRIMES);
-
-    bitset_free(primes);
 
     fprintf(stderr, "Time=%.3g\n", (double)(clock()-start)/CLOCKS_PER_SEC);
     return 0;
@@ -54,13 +52,12 @@ static void print_primes(const bitset_t primes, int count)
     bitset_t primes_to_print = calloc(sizeof(unsigned long int), count);
     if (primes_to_print == NULL)
     {
-        free(primes);
         error_exit("Ran out of memory.");
     }
 
     short cur = count -1;
 
-    for (bitset_index_t i = bitset_size(primes); i >= 2; i--)
+    for (bitset_index_t i = bitset_size(primes) -1; i >= 2; i--)
     {
         if (!bitset_getbit(primes, i) && cur >= 0)
         {
